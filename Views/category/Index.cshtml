@@ -1,0 +1,43 @@
+@{
+    var cats = ViewData["Categories"] as List<Category>;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+    <h2>Categories</h2>
+</head>
+<body>
+<div>
+    <p>
+        <a asp-action="create" class="btn btn-primary">Create New</a>
+    </p>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var element in cats)
+    {
+        <tr>
+            <td>@element.Name</td>
+            <td>@element.description</td>
+            <td>
+                <a asp-action="details" asp-route-id="@element.ID" class="btn btn-info">More</a>
+                <a asp-action="edit"asp-route-id="@element.ID" class="btn btn-warning">Edit</a>
+                <a asp-action="delete" asp-route-id="@element.ID" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</body>
+</html>

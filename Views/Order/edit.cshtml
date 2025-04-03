@@ -1,0 +1,67 @@
+@model Order
+@{
+var customers = ViewData["Customers"] as List<Customer>;
+var products = ViewData["Products"] as List<Product>;
+}
+
+<h2>Edit Order</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label class="control-label">Customer</label>
+        <select name="CustomerId" class="form-control">
+            @foreach (var customer in customers)
+            {
+            <option value="@customer.Id" selected="@(customer.Id == Model.CustomerId)">@customer.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Order Items</label>
+        <table class="table" id="orderItems">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var i = 0; i < Model.OrderItems.Count; i++)
+            {
+            <tr>
+                <td>
+                    <select name="OrderItems[@i].ProductId" class="form-control">
+                        @foreach (var product in products)
+                        {
+                        <option value="@product.ID" selected="@(product.ID == Model.OrderItems[i].Productid)">
+                            @product.name (@product.price.ToString("C"))
+                        </option>
+                        }
+                    </select>
+                    <input type="hidden" name="OrderItems[@i].ID" value="@Model.OrderItems[i].id" />
+                </td>
+                <td>
+                    <input type="number" name="OrderItems[@i].Quantity"
+                           value="@Model.OrderItems[i].quantity" class="form-control" min="1" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-secondary" onclick="addRow()">Add Item</button>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
